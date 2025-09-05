@@ -33,7 +33,7 @@ function resetAutobus() {
 }
 
 function renderAutobus() {
-  autobusCards.innerHTML = '<div style="display:flex; gap:16px; justify-content:center; width:100%;">';
+  autobusCards.innerHTML = '<div style="display:flex; gap:16px; justify-content:center; width:150%;">';
   for (let p = 0; p < NUM_PILES; p++) {
     autobusCards.innerHTML += `<div style="display:flex; flex-direction:column; align-items:center; min-width:40px;">`;
     // Affiche seulement la dernière carte posée dans la pile (ou rien si vide)
@@ -97,3 +97,5 @@ autobusCards.addEventListener('click', function(e) {
 });
 
 resetAutobus();
+
+// Calculateur de probabilité

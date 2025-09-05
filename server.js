@@ -37,29 +37,29 @@ io.on('connection', (socket) => {
   });
 
   // R Place: renvoie la grille
-  socket.on('rplace get', () => {
-    socket.emit('rplace grid', rplaceGrid);
-  });
+//   socket.on('rplace get', () => {
+//     socket.emit('rplace grid', rplaceGrid);
+//   });
 
-  // R Place: modifie un pixel
-  socket.on('rplace pixel', ({ idx, color, user }) => {
-    if (typeof idx === 'number' && idx >= 0 && idx < rplaceGrid.length && typeof color === 'string' && typeof user === 'string') {
-      rplaceGrid[idx] = { color, user };
-      io.emit('rplace pixel', { idx, color, user });
-    }
-  });
+//   // R Place: modifie un pixel
+//   socket.on('rplace pixel', ({ idx, color, user }) => {
+//     if (typeof idx === 'number' && idx >= 0 && idx < rplaceGrid.length && typeof color === 'string' && typeof user === 'string') {
+//       rplaceGrid[idx] = { color, user };
+//       io.emit('rplace pixel', { idx, color, user });
+//     }
+//   });
 
-  // Document collaboratif
-  if (!global.collabDoc) global.collabDoc = { text: '' };
-  socket.on('collabdoc get', () => {
-    socket.emit('collabdoc init', { text: global.collabDoc.text });
-  });
-  socket.on('collabdoc update', ({ text, user }) => {
-    if (typeof text === 'string') {
-      global.collabDoc.text = text;
-      socket.broadcast.emit('collabdoc update', { text, user });
-    }
-  });
+//   // Document collaboratif
+//   if (!global.collabDoc) global.collabDoc = { text: '' };
+//   socket.on('collabdoc get', () => {
+//     socket.emit('collabdoc init', { text: global.collabDoc.text });
+//   });
+//   socket.on('collabdoc update', ({ text, user }) => {
+//     if (typeof text === 'string') {
+//       global.collabDoc.text = text;
+//       socket.broadcast.emit('collabdoc update', { text, user });
+//     }
+//   });
 });
 
 
