@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion au chat</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #18181b;
+            color: #e5e5e5;
+            margin: 0;
+            padding: 0;
+        }
+        #login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            background: #232327;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+            padding: 32px 24px;
+        }
+        h2 {
+            margin-bottom: 24px;
+            color: #fff;
+            text-align: center;
+        }
+        #pseudo-form {
+            display: flex;
+            flex-direction: column;
+        }
+        #pseudo-input {
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            background: #29292e;
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+        }
+        #pseudo-btn {
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            background: #9147ff;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        #pseudo-btn:hover {
+            background: #772ce8;
+        }
+    </style>
+</head>
+<body>
+<div id="login-container">
+    <h2>Entrez votre pseudo</h2>
+    <form id="pseudo-form" autocomplete="off">
+        <input id="pseudo-input" type="text" placeholder="Pseudo..." maxlength="20" required />
+        <button id="pseudo-btn" type="submit">Accéder au chat</button>
+    </form>
+</div>
+<script>
+    document.getElementById('pseudo-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const pseudo = document.getElementById('pseudo-input').value.trim();
+        if (pseudo.length > 0) {
+            localStorage.setItem('chatPseudo', pseudo);
+            window.location.href = '/';
+        }
+    });
+</script>
+</body>
+</html>

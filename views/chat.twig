@@ -4,6 +4,36 @@
     <meta charset="UTF-8">
     <title>Chat Simple</title>
     <style>
+        .color-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid #29292e;
+            margin: 0;
+            cursor: pointer;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .color-btn.selected {
+            border: 2px solid #fff;
+            box-shadow: 0 0 4px #fff;
+        }
+        #rplace-grid {
+            margin-top: 8px;
+        }
+        .pixel {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #29292e;
+            box-sizing: border-box;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .pixel:hover {
+            box-shadow: 0 0 6px #9147ff;
+            z-index: 2;
+        }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
         body {
             font-family: 'Inter', Arial, sans-serif;
@@ -90,28 +120,42 @@
 <body>
 <div id="chat-container">
     <h2>Chat Simple</h2>
+    {# <div id="pseudo-section" style="margin-bottom: 16px;">
+        <input id="pseudo-input" type="text" placeholder="Entrez votre pseudo..." maxlength="20" style="width: 70%; padding: 8px; border-radius: 6px; border: none; background: #29292e; color: #fff; font-size: 1rem; margin-right: 8px;" />
+        <button id="pseudo-btn" style="padding: 8px 16px; border-radius: 6px; border: none; background: #9147ff; color: #fff; font-weight: bold; cursor: pointer;">Valider</button>
+    </div> #}
     <ul id="messages"></ul>
+    
     <form id="form" autocomplete="off">
-        <input id="input" placeholder="Votre message..." autocomplete="off" />
-        <button id="send">Envoyer</button>
+        <input id="input" placeholder="Votre message..." autocomplete="off" disabled />
+        <button id="send" disabled>Envoyer</button>
     </form>
+<div id="rplace-container" style="margin-top:32px;">
+    <h3 style="background:#18181b; color:#fff; margin:0; padding:12px 24px; border-bottom:1px solid #29292e; font-size:1.1rem;">R Place (16x16)</h3>
+    <div id="color-picker" style="display:flex; flex-wrap:wrap; gap:8px; padding:16px 24px;"></div>
+    <div id="rplace-grid" style="display:grid; grid-template-columns:repeat(16,20px); grid-template-rows:repeat(16,20px); gap:2px; background:#232327; padding:16px 24px 24px 24px; border-radius:8px;"></div>
+</div>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    let username = '';
-    while (!username) {
-        username = prompt('Entrez votre pseudo :');
+    let username = localStorage.getItem('chatPseudo') || '';
+    if (!username) {
+        window.location.href = '/login';
     }
     const socket = io();
-    socket.emit('set username', username);
-
     const form = document.getElementById('form');
     const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
     const messages = document.getElementById('messages');
+
+    input.disabled = false;
+    sendBtn.disabled = false;
+    input.focus();
+    socket.emit('set username', username);
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (input.value) {
+        if (input.value && username) {
             socket.emit('chat message', input.value);
             input.value = '';
         }
@@ -142,5 +186,6 @@
         messages.scrollTop = messages.scrollHeight;
     });
 </script>
+<script src="/rplace.js"></script>
 </body>
 </html>
