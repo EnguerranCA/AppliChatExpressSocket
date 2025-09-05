@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Simple</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #18181b;
+            color: #e5e5e5;
+        }
+        #chat-container {
+            max-width: 480px;
+            margin: 40px auto;
+            background: #232327;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+            padding: 0;
+            overflow: hidden;
+        }
+        h2 {
+            background: #18181b;
+            color: #fff;
+            margin: 0;
+            padding: 18px 24px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #29292e;
+            letter-spacing: 1px;
+        }
+        #messages {
+            list-style: none;
+            padding: 16px 24px 0 24px;
+            margin: 0;
+            height: 340px;
+            overflow-y: auto;
+            background: #18181b;
+            border-bottom: 1px solid #29292e;
+        }
+        #messages li {
+            margin: 6px 0;
+            font-size: 1rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .username {
+            font-weight: bold;
+            margin-right: 6px;
+            border-radius: 4px;
+            padding: 2px 6px;
+            display: inline-block;
+        }
+        #form {
+            display: flex;
+            background: #232327;
+            padding: 16px 24px;
+            border-top: 1px solid #29292e;
+        }
+        #input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            background: #29292e;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+        #send {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            background: #9147ff;
+            color: #fff;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #send:hover {
+            background: #772ce8;
+        }
+        ::placeholder {
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+<div id="chat-container">
+    <h2>Chat Simple</h2>
+    <ul id="messages"></ul>
+    <form id="form" autocomplete="off">
+        <input id="input" placeholder="Votre message..." autocomplete="off" />
+        <button id="send">Envoyer</button>
+    </form>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let username = '';
+    while (!username) {
+        username = prompt('Entrez votre pseudo :');
+    }
+    const socket = io();
+    socket.emit('set username', username);
+
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit('chat message', input.value);
+            input.value = '';
+        }
+    });
+
+    // Génère une couleur pseudo unique façon Twitch
+    function getUsernameColor(name) {
+        const colors = [
+            '#FF69B4', '#1E90FF', '#32CD32', '#FFD700', '#FF4500', '#8A2BE2', '#00CED1', '#FF6347', '#00FF7F', '#FFB6C1',
+            '#20B2AA', '#FF8C00', '#7FFF00', '#DC143C', '#00BFFF', '#ADFF2F', '#FF00FF', '#40E0D0', '#FF1493', '#00FA9A'
+        ];
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return colors[Math.abs(hash) % colors.length];
+    }
+
+    socket.on('chat message', function(data) {
+        const item = document.createElement('li');
+        const userSpan = document.createElement('span');
+        userSpan.className = 'username';
+        userSpan.textContent = data.user;
+        userSpan.style.color = getUsernameColor(data.user);
+        item.appendChild(userSpan);
+        item.appendChild(document.createTextNode(': ' + data.message));
+        messages.appendChild(item);
+        messages.scrollTop = messages.scrollHeight;
+    });
+</script>
+</body>
+</html>
