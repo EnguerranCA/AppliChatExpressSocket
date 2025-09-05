@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -136,7 +137,16 @@
         <h3 style="background:#18181b; color:#fff; margin:0; padding:12px 24px; border-bottom:1px solid #29292e; font-size:1.1rem;">Document collaboratif</h3>
         <textarea id="collab-doc" style="width:calc(100% - 48px); height:340px; margin:16px 24px 24px 24px; background:#18181b; color:#fff; border-radius:8px; border:1px solid #29292e; font-size:1rem; resize:vertical; padding:12px;"></textarea>
     </div>
-</div>
+    </div>
+        <div id="autobus-panel" style="flex: 1 1 0; min-width: 320px; max-width: 480px; background:#232327; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.4); padding:0; overflow:hidden;">
+            <h3 style="background:#18181b; color:#fff; margin:0; padding:12px 24px; border-bottom:1px solid #29292e; font-size:1.1rem;">L'autobus</h3>
+            <div id="autobus-cards" style="margin:16px 24px 12px 24px; display:flex; align-items:center;"></div>
+            <div id="autobus-btns" style="margin:0 24px 12px 24px;">
+                <button data-guess="plus" style="background:#32CD32; color:#fff; font-weight:bold; border:none; border-radius:6px; padding:10px 24px; margin-right:12px; cursor:pointer;">Plus grand</button>
+                <button data-guess="moins" style="background:#FF4500; color:#fff; font-weight:bold; border:none; border-radius:6px; padding:10px 24px; cursor:pointer;">Plus petit</button>
+            </div>
+            <div id="autobus-msg" style="margin:0 24px 24px 24px; font-size:1rem;"></div>
+    </div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     let username = localStorage.getItem('chatPseudo') || '';
@@ -189,5 +199,6 @@
 </script>
 <script src="/rplace.js"></script>
 <script src="/collabdoc.js"></script>
+<script src="/autobus.js"></script>
 </body>
 </html>
