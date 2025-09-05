@@ -47,7 +47,21 @@ io.on('connection', (socket) => {
       io.emit('rplace pixel', { idx, color, user });
     }
   });
+
+  // Document collaboratif
+  if (!global.collabDoc) global.collabDoc = { text: '' };
+  socket.on('collabdoc get', () => {
+    socket.emit('collabdoc init', { text: global.collabDoc.text });
+  });
+  socket.on('collabdoc update', ({ text, user }) => {
+    if (typeof text === 'string') {
+      global.collabDoc.text = text;
+      socket.broadcast.emit('collabdoc update', { text, user });
+    }
+  });
 });
+
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
