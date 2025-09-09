@@ -1,5 +1,6 @@
 {
   "name": "nodeintro",
+  "type": "module",
   "version": "1.0.0",
   "main": "Module.js",
   "scripts": {
@@ -10,9 +11,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.15.0",
     "body-parser": "^2.2.0",
     "express": "^5.1.0",
     "install": "^0.13.0",
+    "prisma": "^6.15.0",
     "save": "^2.9.0",
     "socket.io": "^4.8.1",
     "twig": "^1.17.1"

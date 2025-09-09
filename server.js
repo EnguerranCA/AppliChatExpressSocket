@@ -1,14 +1,23 @@
 
-const express = require('express');
+import express from 'express';
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import path from 'path';
+import twig from 'twig';
+import { PrismaClient } from '@prisma/client';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = express();
-const http = require('http');
 const server = http.createServer(app);
-const { Server } = require('socket.io');
-const io = new Server(server);
-const path = require('path');
+const io = new SocketIOServer(server);
+
+const prisma = new PrismaClient();
 
 // Twig setup
-const twig = require('twig');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
 
@@ -29,10 +38,24 @@ app.get('/', (req, res) => {
 let rplaceGrid = Array(16 * 16).fill().map(() => ({ color: '#FFFFFF', user: '' }));
 io.on('connection', (socket) => {
   let username = '';
-  socket.on('set username', (name) => {
+  socket.on('set username', async (name) => {
     username = name;
+    // Envoie les 20 derniers messages à l'utilisateur qui vient d'arriver
+    const lastMessages = await prisma.message.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 20
+    });
+    // On les renvoie dans l'ordre chronologique
+    socket.emit('chat history', lastMessages.reverse());
   });
-  socket.on('chat message', (msg) => {
+  socket.on('chat message', async (msg) => {
+    // Enregistre le message en base
+    await prisma.message.create({
+      data: {
+        content: msg,
+        pseudo: username
+      }
+    });
     io.emit('chat message', { user: username, message: msg });
   });
 
