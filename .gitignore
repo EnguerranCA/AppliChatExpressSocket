@@ -1,5 +1,7 @@
 # Ne pas versionner les variables d'environnement et secrets
 .env
+.env.web
+.env.*
 ./node_modules
 node_modules
 /generated/prisma
