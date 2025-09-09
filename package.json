@@ -10,6 +10,8 @@
     "test:routes": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/routes.test.js",
     "test:messages": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/messageFormatting.test.js",
     "test:prisma": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/prisma.test.js",
+    "test:socket": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/socket.integration.test.js",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/*.integration.test.js",
     "start": "node server.js"
   },
   "author": "",

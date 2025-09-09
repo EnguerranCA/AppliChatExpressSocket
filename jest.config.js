@@ -5,10 +5,12 @@ export default {
     '*.js',
     'utils/**/*.js',
     'services/**/*.js',
+    'sockets/**/*.js',
     '!server.js',
     '!**/node_modules/**'
   ],
   coverageDirectory: 'coverage',
   verbose: true,
-  testTimeout: 10000
+  testTimeout: 20000 // Augmenté pour les tests d'intégration Socket.IO
 };
+""
