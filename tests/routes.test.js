@@ -26,6 +26,7 @@ describe('Tests des routes HTTP', () => {
             
             expect(response.status).toBe(200);
             expect(response.type).toMatch(/html/);
+            expect(response.text).toMatch(/<!DOCTYPE html>/);
         });
     });
 
