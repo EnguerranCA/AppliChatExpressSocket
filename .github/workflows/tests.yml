@@ -2,9 +2,9 @@ name: Unit Tests CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ V2 ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
