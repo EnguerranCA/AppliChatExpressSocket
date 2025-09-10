@@ -37,19 +37,6 @@ form.addEventListener('submit', function(e) {
     }
 });
 
-// Génère une couleur pseudo unique façon Twitch
-function getUsernameColor(name) {
-    const colors = [
-        '#FF69B4', '#1E90FF', '#32CD32', '#FFD700', '#FF4500', '#8A2BE2', '#00CED1', '#FF6347', '#00FF7F', '#FFB6C1',
-        '#20B2AA', '#FF8C00', '#7FFF00', '#DC143C', '#00BFFF', '#ADFF2F', '#FF00FF', '#40E0D0', '#FF1493', '#00FA9A'
-    ];
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-        hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return colors[Math.abs(hash) % colors.length];
-}
-
 socket.on('chat message', function(data) {
     const item = document.createElement('li');
     const userSpan = document.createElement('span');
