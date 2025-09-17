@@ -121,7 +121,11 @@
 <body>
 <div id="main-flex" style="display: flex; gap: 32px; justify-content: center; align-items: flex-start; margin: 40px auto; max-width: 1400px;">
     <div id="chat-container" style="flex: 1 1 0; min-width: 320px; max-width: 480px;">
-        <h2>Chat Simple</h2>
+        <h2>Chat Simple 
+            <button id="logout-btn" style="float: right; background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">
+                Déconnexion
+            </button>
+        </h2>
         <ul id="messages"></ul>
         <form id="form" autocomplete="off">
             <input id="input" placeholder="Votre message..." autocomplete="off" disabled />
@@ -152,5 +156,18 @@
 <script src="/rplace.js"></script>
 <script src="/collabdoc.js"></script>
 <script src="/autobus.js"></script>
+<script>
+    // Logique de déconnexion
+    document.getElementById('logout-btn').addEventListener('click', function() {
+        if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+            // Nettoyer le localStorage
+            localStorage.removeItem('chatPseudo');
+            localStorage.removeItem('userToken');
+            
+            // Rediriger vers la route de déconnexion
+            window.location.href = '/logout';
+        }
+    });
+</script>
 </body>
 </html>
