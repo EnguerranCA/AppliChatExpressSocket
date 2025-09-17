@@ -24,11 +24,11 @@
             color: #fff;
             text-align: center;
         }
-        #pseudo-form {
+        #login-form {
             display: flex;
             flex-direction: column;
         }
-        #pseudo-input {
+        #pseudo-input, #password-input {
             padding: 12px;
             border-radius: 6px;
             border: none;
@@ -37,7 +37,7 @@
             font-size: 1.1rem;
             margin-bottom: 18px;
         }
-        #pseudo-btn {
+        #login-btn {
             padding: 12px;
             border-radius: 6px;
             border: none;
@@ -47,26 +47,49 @@
             cursor: pointer;
             font-size: 1.1rem;
         }
-        #pseudo-btn:hover {
+        #login-btn:hover {
             background: #772ce8;
         }
     </style>
 </head>
 <body>
 <div id="login-container">
-    <h2>Entrez votre pseudo</h2>
-    <form id="pseudo-form" autocomplete="off">
-        <input id="pseudo-input" type="text" placeholder="Pseudo..." maxlength="20" required />
-        <button id="pseudo-btn" type="submit">Accéder au chat</button>
+    <h2>Connexion au chat</h2>
+    <form id="login-form" autocomplete="off">
+        <input id="pseudo-input" name="pseudo" type="text" placeholder="Pseudo..." maxlength="20" required />
+        <input id="password-input" name="password" type="password" placeholder="Mot de passe..." required />
+        <button id="login-btn" type="submit">Se connecter</button>
     </form>
 </div>
 <script>
-    document.getElementById('pseudo-form').addEventListener('submit', function(e) {
+    document.getElementById('login-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const pseudo = document.getElementById('pseudo-input').value.trim();
-        if (pseudo.length > 0) {
-            localStorage.setItem('chatPseudo', pseudo);
-            window.location.href = '/';
+        const password = document.getElementById('password-input').value.trim();
+        
+        if (pseudo.length > 0 && password.length > 0) {
+            // Envoyer les données de connexion au serveur
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ pseudo, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('chatPseudo', pseudo);
+                    localStorage.setItem('userToken', data.token || 'temp-token');
+                    window.location.href = '/';
+                } else {
+                    alert(data.message || 'Erreur de connexion');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Erreur de connexion au serveur');
+            });
         }
     });
 </script>
