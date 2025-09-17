@@ -4,6 +4,7 @@ import twig from 'twig';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MessageService } from './services/messageService.js';
+import { AuthService } from './services/authService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,6 +12,7 @@ const __dirname = dirname(__filename);
 export function createApp(messageService = null) {
     const app = express();
     const msgService = messageService || new MessageService();
+    const authService = new AuthService();
 
     // Middleware
     app.use(express.json());
@@ -30,6 +32,55 @@ export function createApp(messageService = null) {
 
     app.get('/', (req, res) => {
         res.render('chat');
+    });
+
+    // Routes d'authentification
+    app.post('/api/login', async (req, res) => {
+        try {
+            const { pseudo, password } = req.body;
+            if (!pseudo || !password) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'Pseudo et mot de passe requis' 
+                });
+            }
+            
+            const result = await authService.login(pseudo, password);
+            if (result.success) {
+                res.json(result);
+            } else {
+                res.status(401).json(result);
+            }
+        } catch (error) {
+            res.status(500).json({ 
+                success: false, 
+                message: 'Erreur serveur' 
+            });
+        }
+    });
+
+    app.post('/api/register', async (req, res) => {
+        try {
+            const { pseudo, password, email } = req.body;
+            if (!pseudo || !password || !email) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'Pseudo, mot de passe et email requis' 
+                });
+            }
+            
+            const result = await authService.register(pseudo, password, email);
+            if (result.success) {
+                res.status(201).json(result);
+            } else {
+                res.status(400).json(result);
+            }
+        } catch (error) {
+            res.status(500).json({ 
+                success: false, 
+                message: 'Erreur serveur' 
+            });
+        }
     });
 
     // API Routes pour les tests
